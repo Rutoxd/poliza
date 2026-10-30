@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Polizas",
+            "request": "launch",
+            "mainClass": "Polizas.Inicio"
+        }
+    ]
+}

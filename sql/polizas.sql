@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS polizas;
+
+USE polizas;
+
+CREATE TABLE IF NOT EXISTS marca(
+    idMarca INT AUTO_INCREMENT PRIMARY KEY,
+    nombreMarca VARCHAR(100) NOT NULL
+);
+
+CREATE USER IF NOT EXISTS 'poliza'@'localhost' IDENTIFIED BY 'poliza123';
+GRANT ALL PRIVILEGES ON polizas.* TO 'poliza'@'localhost';
+FLUSH PRIVILEGES;
