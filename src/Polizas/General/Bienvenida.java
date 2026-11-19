@@ -1,93 +1,111 @@
 package Polizas.General;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
-// Ventana principal (hereda de JFrame)
+// Ventana principal: barra de menú, encabezado y panel central con CardLayout
 public class Bienvenida extends JFrame {
 
     // Atributos: menú
-    protected JMenuBar mb;
-    protected JMenu mA, mBD;
-    protected JMenuItem home;
-    protected JMenuItem mBD_a, mBD_c, mensaje, mMarcas, personas;
+    protected JMenuItem mInicio, mSalir;
+    protected JMenuItem mClientes, mVehiculos;
+    protected JMenuItem mAseguradoras, mCoberturas, mTiposPoliza, mMarcas, mModelos;
+    protected JMenuItem mPrueba;
 
-    // Atributos: paneles (izquierdo, superior, derecho, central)
+    // Atributos: panel central (muestra una pantalla a la vez, por nombre)
     protected CardLayout cl;
-    protected JPanel pi, ps, pd, pc;
+    protected JPanel pc;
+    protected JLabel lblEstado;
 
-    // Constructor: arma la ventana
     public Bienvenida() {
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setBackground(Color.yellow);
-        this.menu();
+        super("Gestor de Pólizas");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(1000, 650));
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        menu();
 
-        // Panel izquierdo
-        pi = new JPanel();
-        pi.setBackground(Color.white);
-        pi.add(new JLabel("Panel izquierdo"));
-        pi.setPreferredSize(new Dimension(200, getHeight()));
-
-        // Panel Superior
-        ps = new JPanel();
-        ps.setBackground(new Color(20, 110, 55));
-        JLabel titulo = new JLabel("Sistema de Gestión ...");
+        // Encabezado
+        JPanel ps = new JPanel(new BorderLayout());
+        ps.setBackground(new Color(15, 127, 108));
+        ps.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        JLabel titulo = new JLabel("Sistema de Gestión de Pólizas");
         titulo.setForeground(Color.white);
-        Font fuente = new Font("Arial", Font.BOLD, 18);
-        titulo.setFont(fuente);
-        ps.add(titulo);
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        ps.add(titulo, BorderLayout.WEST);
 
-        // Panel central: CardLayout muestra un panel a la vez, por nombre
+        // Panel central
         cl = new CardLayout();
         pc = new JPanel(cl);
-        pc.add(new JLabel("Welcome to Java ..."), "home");
-        pc.add(new Mensaje(), "mensaje");
+        JPanel home = new JPanel(new BorderLayout());
+        JLabel lblHome = new JLabel("<html><center><h1>Bienvenido</h1>"
+                + "Usa el menú para administrar clientes, vehículos y catálogos.</center></html>",
+                SwingConstants.CENTER);
+        home.add(lblHome, BorderLayout.CENTER);
+        pc.add(home, "home");
 
-        // Panel derecho
-        pd = new JPanel();
-        pd.setBackground(Color.white);
-        pd.add(new JLabel("Panel derecho "));
-        pd.setPreferredSize(new Dimension(200, getHeight()));
+        // Barra de estado: resultado de la conexión
+        lblEstado = new JLabel(" ");
+        lblEstado.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
 
-        // Acomodo de los paneles con BorderLayout
-        this.setLayout(new BorderLayout());
-        this.add(pi, BorderLayout.WEST);
-        this.add(pd, BorderLayout.EAST);
-        this.add(ps, BorderLayout.NORTH);
-        this.add(pc, BorderLayout.CENTER);
-
-        this.setVisible(true);
+        setLayout(new BorderLayout());
+        add(ps, BorderLayout.NORTH);
+        add(pc, BorderLayout.CENTER);
+        add(lblEstado, BorderLayout.SOUTH);
+        setVisible(true);
     }
 
-    // Método: crea la barra de menú
+    // Método: crea la barra de menú (RNF-06: cada pantalla a dos clics)
     private void menu() {
-        this.mb = new JMenuBar();
-        this.setJMenuBar(mb);
+        JMenuBar mb = new JMenuBar();
+        setJMenuBar(mb);
 
-        this.mA = new JMenu("Archivo");
-        home = new JMenuItem("Home");
-        this.mA.add(home);
+        JMenu mArchivo = new JMenu("Archivo");
+        mInicio = new JMenuItem("Inicio");
+        mPrueba = new JMenuItem("Probar conexión");
+        mSalir = new JMenuItem("Salir");
+        mArchivo.add(mInicio);
+        mArchivo.add(mPrueba);
+        mArchivo.addSeparator();
+        mArchivo.add(mSalir);
 
-        this.mensaje = new JMenuItem("Mensaje");
-        this.mA.add(mensaje);
+        JMenu mClientesMenu = new JMenu("Clientes");
+        mClientes = new JMenuItem("Clientes");
+        mVehiculos = new JMenuItem("Vehículos");
+        mClientesMenu.add(mClientes);
+        mClientesMenu.add(mVehiculos);
 
-        this.mBD = new JMenu("Base de Datos");
-
+        JMenu mCatalogos = new JMenu("Catálogos");
+        mAseguradoras = new JMenuItem("Aseguradoras");
+        mTiposPoliza = new JMenuItem("Tipos de póliza");
+        mCoberturas = new JMenuItem("Coberturas");
         mMarcas = new JMenuItem("Marcas");
-        mBD.add(mMarcas);
+        mModelos = new JMenuItem("Modelos");
+        mCatalogos.add(mAseguradoras);
+        mCatalogos.add(mTiposPoliza);
+        mCatalogos.add(mCoberturas);
+        mCatalogos.addSeparator();
+        mCatalogos.add(mMarcas);
+        mCatalogos.add(mModelos);
 
-        this.mb.add(mA);
-        this.mb.add(mBD);
+        mb.add(mArchivo);
+        mb.add(mClientesMenu);
+        mb.add(mCatalogos);
+    }
+
+    // Método: muestra una pantalla en el panel central
+    public void mostrar(JPanel panel, String nombre) {
+        pc.add(panel, nombre);
+        cl.show(pc, nombre);
     }
 }

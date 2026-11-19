@@ -1,41 +1,85 @@
-# Proyecto final POO — Sistema de Gestión de Pólizas
+# Gestor de Pólizas — Proyecto final de POO (Fase 3)
 
-## 1. Base de datos
-Con MariaDB o MySQL encendido (`sudo systemctl start mariadb`), corre el script como root. Crea la base `polizas` con sus 14 tablas y 3 vistas (modelo normalizado a 3FN, Fase 3) y el usuario `poliza` / `poliza123` que usa la aplicación:
+Sistema de gestión de pólizas de seguros en Java (Swing, MVC) con MySQL/MariaDB.
+Fase 3: base de datos normalizada a 3FN, conexión JDBC y CRUD adaptado al dominio del proyecto.
+
+Equipo: Rubén, Rodrigo y José Luis.
+
+## Requisitos
+
+- Java 17 o superior.
+- MySQL 8.0.16+ o MariaDB 10.4+.
+- El driver JDBC ya viene en `lib/mariadb-java-client.jar` (MariaDB Connector/J 3.5.3; también conecta con MySQL).
+
+## 1. Crear la base de datos
+
+Como root, corre el script. Crea la base `polizas` (14 tablas y 3 vistas) y el usuario de desarrollo que usa la aplicación:
 
 ```bash
-sudo mariadb < sql/polizas.sql
-mariadb -u poliza -ppoliza123 polizas < sql/datos_prueba.sql   # opcional: datos ficticios
+mysql -u root -p < sql/polizas.sql
+mysql -u root -p polizas < sql/datos_prueba.sql   # opcional: datos ficticios
 ```
 
-Para comprobar la conexión desde Java (evidencia de la Fase 3):
+El script borra y vuelve a crear la base `polizas`.
+
+## 2. Ejecutar
+
+- **NetBeans**: abre la carpeta como proyecto y presiona Run (clase principal `Polizas.Inicio`).
+- **VS Code**: con el Extension Pack for Java, presiona F5 (configuración "Polizas").
+- **Terminal**: `./run.sh` (Linux/macOS) o `run.bat` (Windows).
+
+Prueba de conexión (evidencia de la Fase 3):
 
 ```bash
-javac -encoding UTF-8 -d bin -cp "lib/*" $(find src -name "*.java")
-java -cp "bin:lib/*" Polizas.General.PruebaConexion
+java -cp "bin:lib/*" Polizas.General.PruebaConexion      # en Windows usa "bin;lib/*"
 ```
 
-## 2. Driver JDBC
-Ya viene incluido: `lib/mariadb-java-client.jar` (MariaDB Connector/J 3.5.3). NetBeans lo toma de `nbproject/project.properties` y VS Code de `.vscode/settings.json`.
+## Estructura
 
-## 3. Ejecutar en VS Code
-- Requiere el **Extension Pack for Java**.
-- Abre la carpeta `poliza` y presiona **F5** (configuración "Polizas").
-- O en la terminal: `./run.sh` (Linux) o `run.bat` (Windows).
+```
+src/Polizas/
+├── Inicio.java              Clase principal
+├── General/                 Ventana principal, conexión y clases base del CRUD
+│   ├── Conexion.java        Conexión JDBC; los modelos heredan de ella
+│   ├── DAO.java             Interfaz genérica create/read/update/delete
+│   ├── CrudVista.java       Pantalla base: formulario, botones y tabla
+│   ├── CrudControl.java     Controlador base: eventos de los botones
+│   ├── CrudTM.java          Modelo de tabla base
+│   ├── Bienvenida.java      Ventana principal con menú
+│   ├── Controlador.java     Acciones del menú
+│   └── PruebaConexion.java  Evidencia de la conexión
+├── Entidades/               Clases del diagrama UML y enumeraciones
+└── Clientes/ Vehiculos/ Aseguradoras/ TiposPoliza/ Coberturas/ Marcas/ Modelos/
+                             Un módulo MVC por pantalla: Modelo (DAO), Vista, Control y TM
+sql/
+├── polizas.sql              Script de creación (3FN)
+└── datos_prueba.sql         Datos ficticios
+```
 
-## 4. Uso
-**Base de Datos → Marcas**, escribe una marca y presiona **Agregar**. Usa **Consultar** para recargar la tabla. Para **Actualizar** o **Eliminar**, primero selecciona la marca en la tabla.
+## Del diagrama de clases al código
 
-## Correcciones respecto al código del protocolo
-1. **Conexion**: la conexión apuntaba a la base `trapy` con usuario `j`/`123`. Ahora apunta a `polizas` en MariaDB con el usuario `poliza` / `poliza123`, que crea el script. Los datos están en constantes. Además, se muestra el mensaje real del error y se valida `cnx` antes de cerrar.
-2. **Mensaje**: se eliminó `import Trapy.*;`, que no existe.
-3. **MarcasVista**: se eliminó `import Grafico.Conexion;`, que no existe, y el import redundante de `MarcasTM`.
-4. **MarcasModelo**: las consultas usaban la tabla `marcas` con columnas `id` y `nombre`. Se ajustaron a la tabla real del script: `marca(idMarca, nombreMarca)`. Si no hay conexión, regresa una lista vacía o 0 en vez de fallar.
-5. **MarcasVista.actualizarVista**: `fireTableDataChanged()` se llama después de llenar la lista, para que la tabla se refresque.
-6. **MarcasControl**:
-   - Se valida que haya una fila seleccionada antes de leerla.
-   - Se valida que el nombre no esté vacío al agregar.
-   - El mensaje ahora dice "Marca registrada" o "No se pudo registrar".
-7. **Bienvenida**: la tarjeta inicial del CardLayout tiene nombre (`"home"`). Se corrigió `MAXIMIZED_BOTH`.
-8. **MarcasModelo / MarcasVista / MarcasControl**: se implementaron `update` y `delete` (en el protocolo regresaban 0) con los botones **Actualizar** y **Eliminar**, para completar el CRUD.
-9. **Vista** y **Marcas/Conexion**: aparecen en la estructura, pero el protocolo no trae su código. Se crearon como clases base mínimas.
+- Las clases de `Entidades` siguen el diagrama UML con las correcciones de la Fase 3:
+  `Persona` es abstracta y `Cliente` y `Usuario` heredan de ella; `Vehiculo` usa `Modelo`, que pertenece a una `Marca`;
+  `Poliza` obtiene al cliente por su vehículo.
+- Los métodos `registrar()`, `consultar()`, `actualizar()` y `eliminar()` del diagrama viven en los modelos de cada
+  módulo (`ClientesModelo`, `VehiculosModelo`, …), que implementan la interfaz `DAO`. Así la entidad no depende de la base.
+- Los métodos de negocio quedan en las entidades: `Cliente.validarRfc()`, `Persona.validarCorreo()`,
+  `Poliza.calcularEstado()`, `calcularSaldo()`, `renovar()`, `cancelar()`, `Pago.estaVencido()`,
+  `AvisoVencimiento.calcularDiasRestantes()`, `Cancelacion.validar()/autorizar()/registrarBaja()`, `Usuario.iniciarSesion()`.
+- El estado de una póliza y el de un pago no se guardan: se calculan (en Java y en las vistas `vistaPoliza` y `vistaPago`).
+
+## Módulos de esta fase
+
+| Menú | Pantalla | Requerimientos |
+|---|---|---|
+| Clientes | Clientes | RF-01 a RF-04 |
+| Clientes | Vehículos | RF-05 a RF-08 |
+| Catálogos | Aseguradoras | RF-24 |
+| Catálogos | Tipos de póliza, Coberturas | RF-25 |
+| Catálogos | Marcas, Modelos | Catálogo de vehículos (Fase 3) |
+
+Pólizas, pagos, avisos, cancelaciones, usuarios e inicio de sesión se implementan en la Fase 4; sus entidades ya están en `Entidades/`.
+
+## Nota de seguridad
+
+`Conexion.java` y `sql/polizas.sql` traen la contraseña del usuario de desarrollo local. No uses esa contraseña en un servidor real.

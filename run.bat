@@ -4,6 +4,6 @@ cd /d "%~dp0"
 if exist bin rmdir /s /q bin
 mkdir bin
 dir /s /b src\*.java > sources.txt
-javac -d bin -cp "lib/*" @sources.txt
+javac --release 17 -encoding UTF-8 -d bin -cp "lib/*" @sources.txt
 del sources.txt
 java -cp "bin;lib/*" Polizas.Inicio

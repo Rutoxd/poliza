@@ -1,101 +1,49 @@
 package Polizas.Marcas;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.ArrayList;
+import Polizas.Entidades.Marca;
 import Polizas.General.Conexion;
 import Polizas.General.DAO;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 // Modelo: CRUD de la tabla marca (hereda Conexion, implementa DAO)
-public class MarcasModelo extends Conexion implements DAO {
+public class MarcasModelo extends Conexion implements DAO<Marca> {
 
-    // Constructor
-    MarcasModelo() {
-        super();
-    }
-
-    // Método: consulta todas las marcas
     @Override
-    public List read() {
+    public List<Marca> read() {
         List<Marca> lista = new ArrayList<>();
+        error = "";
         try {
-            this.conectar();
+            conectar();
             if (cnx == null) {
                 return lista;
             }
-            ps = cnx.prepareStatement("SELECT idMarca, nombreMarca FROM marca");
+            ps = cnx.prepareStatement("SELECT idMarca, nombreMarca FROM marca ORDER BY nombreMarca");
             rs = ps.executeQuery();
-            lista.clear();
-
-            while (rs.next()) { // recorre fila por fila
+            while (rs.next()) {
                 lista.add(new Marca(rs.getInt("idMarca"), rs.getString("nombreMarca")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+            registrarError(ex);
         } finally {
-            this.close(); // siempre cierra la conexión
+            close();
         }
         return lista;
     }
 
-    // Método: inserta una marca. Parámetro obj: la marca
     @Override
-    public int create(Object obj) {
-        try {
-            this.conectar();
-            if (cnx == null) {
-                return 0;
-            }
-            Marca marca = (Marca) obj;
-            ps = cnx.prepareStatement("INSERT INTO marca(nombreMarca) VALUES (?)"); // ? evita inyección SQL
-            ps.setString(1, marca.getNombre());
-            return ps.executeUpdate(); // regresa filas afectadas
-        } catch (SQLException ex) {
-            System.out.println("Error " + ex.getMessage());
-            return 0;
-        } finally {
-            this.close();
-        }
+    public int create(Marca m) {
+        return ejecutar("INSERT INTO marca (nombreMarca) VALUES (?)", m.getNombre());
     }
 
-    // Método: elimina una marca. Parámetro obj: la marca
     @Override
-    public int delete(Object obj) {
-        try {
-            this.conectar();
-            if (cnx == null) {
-                return 0;
-            }
-            Marca marca = (Marca) obj;
-            ps = cnx.prepareStatement("DELETE FROM marca WHERE idMarca = ?");
-            ps.setInt(1, marca.getId());
-            return ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println("Error " + ex.getMessage());
-            return 0;
-        } finally {
-            this.close();
-        }
+    public int update(Marca m) {
+        return ejecutar("UPDATE marca SET nombreMarca = ? WHERE idMarca = ?", m.getNombre(), m.getId());
     }
 
-    // Método: actualiza el nombre. Parámetro lista: la marca con el nombre nuevo
     @Override
-    public int update(Object lista) {
-        try {
-            this.conectar();
-            if (cnx == null) {
-                return 0;
-            }
-            Marca marca = (Marca) lista;
-            ps = cnx.prepareStatement("UPDATE marca SET nombreMarca = ? WHERE idMarca = ?");
-            ps.setString(1, marca.getNombre());
-            ps.setInt(2, marca.getId());
-            return ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println("Error " + ex.getMessage());
-            return 0;
-        } finally {
-            this.close();
-        }
+    public int delete(Marca m) {
+        return ejecutar("DELETE FROM marca WHERE idMarca = ?", m.getId());
     }
 }

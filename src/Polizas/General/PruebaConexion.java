@@ -3,8 +3,8 @@ package Polizas.General;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-// Evidencia de la Fase 3: abre la conexión con la clase Conexion,
-// muestra los datos del servidor y cuenta los registros de cada tabla
+// Evidencia de la Fase 3: abre la conexión, muestra el servidor y cuenta los registros de cada tabla.
+// Ejecutar: java -cp "bin:lib/*" Polizas.General.PruebaConexion
 public class PruebaConexion extends Conexion {
 
     private static final String[] TABLAS = {
@@ -16,12 +16,11 @@ public class PruebaConexion extends Conexion {
         new PruebaConexion().probar();
     }
 
-    // Método: prueba la conexión y consulta la base
     public void probar() {
         try {
             conectar();
             if (cnx == null) {
-                System.out.println("No se pudo conectar a la base de datos.");
+                System.out.println(error);
                 return;
             }
             DatabaseMetaData meta = cnx.getMetaData();

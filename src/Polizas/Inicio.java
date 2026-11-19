@@ -1,24 +1,19 @@
 package Polizas;
 
-import Polizas.General.Controlador;
 import Polizas.General.Bienvenida;
+import Polizas.General.Controlador;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
-// Clase principal: arranca el sistemaq
+// Clase principal: arranca el Sistema de Gestión de Pólizas
 public class Inicio {
 
-    // Atributos
-    private Controlador controlador;
-    private Bienvenida vista;
-
-    // Constructor: crea la vista y le conecta su controlador
-    public Inicio() {
-        vista = new Bienvenida();
-        controlador = new Controlador(vista);
-    }
-
-    // Método main. Parámetro args: argumentos de consola (no se usan)
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Inicio::new); // crea la ventana en el hilo de Swing
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // si no se puede, Swing usa su apariencia por defecto
+        }
+        SwingUtilities.invokeLater(() -> new Controlador(new Bienvenida())); // ventana en el hilo de Swing
     }
 }

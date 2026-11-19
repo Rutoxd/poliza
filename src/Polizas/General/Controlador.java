@@ -1,39 +1,84 @@
 package Polizas.General;
 
-import Polizas.Marcas.MarcasVista;
+import Polizas.Aseguradoras.AseguradorasControl;
+import Polizas.Aseguradoras.AseguradorasVista;
+import Polizas.Clientes.ClientesControl;
+import Polizas.Clientes.ClientesVista;
+import Polizas.Coberturas.CoberturasControl;
+import Polizas.Coberturas.CoberturasVista;
 import Polizas.Marcas.MarcasControl;
-import javax.swing.JLabel;
+import Polizas.Marcas.MarcasVista;
+import Polizas.Modelos.ModelosControl;
+import Polizas.Modelos.ModelosVista;
+import Polizas.TiposPoliza.TiposPolizaControl;
+import Polizas.TiposPoliza.TiposPolizaVista;
+import Polizas.Vehiculos.VehiculosControl;
+import Polizas.Vehiculos.VehiculosVista;
+import javax.swing.JOptionPane;
 
-// Controlador del menú principal
+// Controlador del menú principal: cada opción crea su vista y su controlador
 public class Controlador {
 
-    // Atributos
-    protected Bienvenida vista;
-    protected MarcasVista marcasVista;
+    private final Bienvenida vista;
 
-    // Constructor. Parámetro vista: la ventana principal
     public Controlador(Bienvenida vista) {
         this.vista = vista;
-        this.eventos();
+        eventos();
+        probarConexion(false);
     }
 
-    // Método: asigna la acción de cada opción del menú
-    public void eventos() {
-        vista.mensaje.addActionListener(
-                e -> vista.cl.show(vista.pc, "mensaje")
-        );
+    private void eventos() {
+        vista.mInicio.addActionListener(e -> vista.cl.show(vista.pc, "home"));
+        vista.mSalir.addActionListener(e -> System.exit(0));
+        vista.mPrueba.addActionListener(e -> probarConexion(true));
 
-        vista.home.addActionListener(e -> {
-            vista.pc.add(new JLabel("Panel Home"), "home");
-            vista.cl.show(vista.pc, "home");
+        vista.mClientes.addActionListener(e -> {
+            ClientesVista v = new ClientesVista();
+            new ClientesControl(v);
+            vista.mostrar(v, "clientes");
         });
-
-        // Marcas: crea la vista, su controlador y la muestra en el centro
+        vista.mVehiculos.addActionListener(e -> {
+            VehiculosVista v = new VehiculosVista();
+            new VehiculosControl(v);
+            vista.mostrar(v, "vehiculos");
+        });
+        vista.mAseguradoras.addActionListener(e -> {
+            AseguradorasVista v = new AseguradorasVista();
+            new AseguradorasControl(v);
+            vista.mostrar(v, "aseguradoras");
+        });
+        vista.mTiposPoliza.addActionListener(e -> {
+            TiposPolizaVista v = new TiposPolizaVista();
+            new TiposPolizaControl(v);
+            vista.mostrar(v, "tipos");
+        });
+        vista.mCoberturas.addActionListener(e -> {
+            CoberturasVista v = new CoberturasVista();
+            new CoberturasControl(v);
+            vista.mostrar(v, "coberturas");
+        });
         vista.mMarcas.addActionListener(e -> {
-            marcasVista = new MarcasVista();
-            new MarcasControl(marcasVista);
-            vista.pc.add(marcasVista, "mk");
-            vista.cl.show(vista.pc, "mk");
+            MarcasVista v = new MarcasVista();
+            new MarcasControl(v);
+            vista.mostrar(v, "marcas");
         });
+        vista.mModelos.addActionListener(e -> {
+            ModelosVista v = new ModelosVista();
+            new ModelosControl(v);
+            vista.mostrar(v, "modelos");
+        });
+    }
+
+    // Método: abre y cierra una conexión; muestra el resultado en la barra de estado
+    private void probarConexion(boolean avisar) {
+        Conexion c = new Conexion();
+        c.conectar();
+        boolean ok = c.cnx != null;
+        c.close();
+        String texto = ok ? "Conectado a la base de datos polizas" : c.getError();
+        vista.lblEstado.setText(texto);
+        if (avisar) {
+            JOptionPane.showMessageDialog(vista, texto);
+        }
     }
 }
