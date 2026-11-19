@@ -17,9 +17,11 @@ public class TipoPoliza {
     private String descripcion;
     private boolean activo = true;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public TipoPoliza() {
     }
 
+    // Constructor con todos los datos (lo usa listar() al leer de la base).
     public TipoPoliza(int id, String nombre, String descripcion, boolean activo) {
         this.id = id;
         this.nombre = nombre;
@@ -27,10 +29,12 @@ public class TipoPoliza {
         this.activo = activo;
     }
 
+    // Guarda este registro nuevo en la tabla tipoPoliza.
     public void registrar() throws SQLException {
         Conexion.ejecutar("INSERT INTO tipoPoliza (nombre, descripcion, activo) VALUES (?, ?, ?)", nombre, descripcion, activo);
     }
 
+    // Guarda los cambios de este registro en la tabla tipoPoliza (lo busca por su id).
     public void actualizar() throws SQLException {
         Conexion.ejecutar("UPDATE tipoPoliza SET nombre = ?, descripcion = ?, activo = ? WHERE idTipoPoliza = ?",
                 nombre, descripcion, activo, id);
@@ -42,6 +46,7 @@ public class TipoPoliza {
         activo = false;
     }
 
+    // Regresa el registro con ese id, o null si no existe.
     public static TipoPoliza consultar(int id) throws SQLException {
         for (TipoPoliza t : listar()) {
             if (t.getId() == id) {
@@ -51,6 +56,7 @@ public class TipoPoliza {
         return null;
     }
 
+    // Regresa todos los registros de la tabla, para llenar las tablas y listas de las pantallas.
     public static List<TipoPoliza> listar() throws SQLException {
         List<TipoPoliza> lista = new ArrayList<>();
         try (Connection cn = Conexion.conectar();
@@ -64,6 +70,7 @@ public class TipoPoliza {
         return lista;
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNombre() { return nombre; }

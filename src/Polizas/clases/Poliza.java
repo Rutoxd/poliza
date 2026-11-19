@@ -31,6 +31,7 @@ public class Poliza {
     private List<Pago> pagos = new ArrayList<>();          // composición
     private Cancelacion cancelacion;                       // composición, 0..1
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Poliza() {
     }
 
@@ -57,6 +58,7 @@ public class Poliza {
         guardarCoberturas();
     }
 
+    // Guarda en polizaCobertura una fila por cada cobertura de la póliza.
     private void guardarCoberturas() throws SQLException {
         for (Cobertura c : coberturas) {
             Conexion.ejecutar("INSERT INTO polizaCobertura (idPoliza, idCobertura) VALUES (?, ?)", id, c.getId());
@@ -209,6 +211,7 @@ public class Poliza {
         System.out.println("Prima total: " + primaTotal + "  Saldo: " + calcularSaldo());
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNumero() { return numero; }

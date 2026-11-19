@@ -21,6 +21,7 @@ public class AvisoVencimiento {
     private double costoRenovacion;  // solo si tipo = POLIZA
     private String resultado;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public AvisoVencimiento() {
     }
 
@@ -89,6 +90,7 @@ public class AvisoVencimiento {
         }
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public TipoAviso getTipo() { return tipo; }
     public Poliza getPoliza() { return poliza; }

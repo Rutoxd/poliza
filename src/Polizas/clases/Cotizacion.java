@@ -20,6 +20,7 @@ public class Cotizacion {
     private FormaPago formaPago;
     private String estado = "PENDIENTE";   // PENDIENTE, ACEPTADA o RECHAZADA
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Cotizacion() {
     }
 
@@ -74,6 +75,7 @@ public class Cotizacion {
         return p;
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public Vehiculo getVehiculo() { return vehiculo; }

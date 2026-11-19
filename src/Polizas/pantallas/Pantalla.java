@@ -145,10 +145,12 @@ public abstract class Pantalla extends JPanel {
         }
     }
 
+    // Muestra un mensaje en una ventana emergente.
     protected void aviso(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
+    // Quita la selección de la tabla y vacía el formulario.
     private void limpiarTodo() {
         tabla.clearSelection();
         limpiar();

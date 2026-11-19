@@ -15,9 +15,11 @@ public class Usuario extends Persona {
     private Rol rol;
     private boolean activo = true;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Usuario() {
     }
 
+    // Constructor con todos los datos (lo usa listar() al leer de la base).
     public Usuario(int id, String nombre, String telefono, String correo, String usuario, Rol rol, boolean activo) {
         super(id, nombre, telefono, correo);
         this.usuario = usuario;
@@ -47,6 +49,7 @@ public class Usuario extends Persona {
         }
     }
 
+    // Termina la sesión del usuario.
     public void cerrarSesion() {
         System.out.println("Sesión cerrada: " + usuario);
     }
@@ -75,6 +78,7 @@ public class Usuario extends Persona {
         return activo && Arrays.asList(permitidos).contains(rol);
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public String getUsuario() { return usuario; }
     public void setUsuario(String usuario) { this.usuario = usuario; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }

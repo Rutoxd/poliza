@@ -93,6 +93,7 @@ public class Conexion {
         return sb.toString();
     }
 
+    // Al ejecutar esta clase sola, muestra en consola el resultado de probar().
     public static void main(String[] args) {
         System.out.println(probar());
     }

@@ -18,9 +18,11 @@ public class Vehiculo {
     private String placas;
     private String numeroSerie;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Vehiculo() {
     }
 
+    // Constructor con todos los datos (lo usa listar() al leer de la base).
     public Vehiculo(int id, Cliente cliente, Modelo modelo, int anio, String placas, String numeroSerie) {
         this.id = id;
         this.cliente = cliente;
@@ -30,11 +32,13 @@ public class Vehiculo {
         this.numeroSerie = numeroSerie;
     }
 
+    // Guarda este registro nuevo en la tabla vehiculo.
     public void registrar() throws SQLException {
         Conexion.ejecutar("INSERT INTO vehiculo (idCliente, idModelo, anio, placas, numeroSerie) VALUES (?, ?, ?, ?, ?)",
                 cliente.getId(), modelo.getId(), anio, placas, numeroSerie);
     }
 
+    // Guarda los cambios de este registro en la tabla vehiculo (lo busca por su id).
     public void actualizar() throws SQLException {
         Conexion.ejecutar("UPDATE vehiculo SET idCliente = ?, idModelo = ?, anio = ?, placas = ?, numeroSerie = ? "
                 + "WHERE idVehiculo = ?", cliente.getId(), modelo.getId(), anio, placas, numeroSerie, id);
@@ -45,6 +49,7 @@ public class Vehiculo {
         Conexion.ejecutar("DELETE FROM vehiculo WHERE idVehiculo = ?", id);
     }
 
+    // Regresa el registro con ese id, o null si no existe.
     public static Vehiculo consultar(int id) throws SQLException {
         for (Vehiculo v : listar()) {
             if (v.getId() == id) {
@@ -91,6 +96,7 @@ public class Vehiculo {
         }
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public Cliente getCliente() { return cliente; }

@@ -19,6 +19,7 @@ public class Pago {
     private String metodoPago;       // EFECTIVO, TRANSFERENCIA, TARJETA o DEPOSITO
     private String comprobante;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Pago() {
     }
 
@@ -76,6 +77,7 @@ public class Pago {
         return fechaPago == null && fechaLimite.isBefore(LocalDate.now());
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public Poliza getPoliza() { return poliza; }

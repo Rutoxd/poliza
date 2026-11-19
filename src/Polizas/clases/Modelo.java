@@ -16,19 +16,23 @@ public class Modelo {
     private String nombre;
     private Marca marca;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Modelo() {
     }
 
+    // Constructor con todos los datos (lo usa listar() al leer de la base).
     public Modelo(int id, String nombre, Marca marca) {
         this.id = id;
         this.nombre = nombre;
         this.marca = marca;
     }
 
+    // Guarda este registro nuevo en la tabla modelo.
     public void registrar() throws SQLException {
         Conexion.ejecutar("INSERT INTO modelo (idMarca, nombreModelo) VALUES (?, ?)", marca.getId(), nombre);
     }
 
+    // Guarda los cambios de este registro en la tabla modelo (lo busca por su id).
     public void actualizar() throws SQLException {
         Conexion.ejecutar("UPDATE modelo SET idMarca = ?, nombreModelo = ? WHERE idModelo = ?", marca.getId(), nombre, id);
     }
@@ -38,6 +42,7 @@ public class Modelo {
         Conexion.ejecutar("DELETE FROM modelo WHERE idModelo = ?", id);
     }
 
+    // Regresa el registro con ese id, o null si no existe.
     public static Modelo consultar(int id) throws SQLException {
         for (Modelo m : listar()) {
             if (m.getId() == id) {
@@ -63,6 +68,7 @@ public class Modelo {
         return lista;
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNombre() { return nombre; }

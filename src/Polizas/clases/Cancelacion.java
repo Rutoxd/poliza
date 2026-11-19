@@ -16,6 +16,7 @@ public class Cancelacion {
     private EstadoCancelacion estado;
     private double montoDevolucion;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Cancelacion() {
     }
 
@@ -71,6 +72,7 @@ public class Cancelacion {
         return c;
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public Poliza getPoliza() { return poliza; }
     public void setPoliza(Poliza poliza) { this.poliza = poliza; }

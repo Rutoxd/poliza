@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 // El menú abre cada pantalla en el centro de la ventana.
 public class Inicio extends JFrame {
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Inicio() {
         super("Sistema de Gestión de Pólizas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,6 +84,7 @@ public class Inicio extends JFrame {
         return panel;
     }
 
+    // Punto de inicio del programa: abre la ventana principal.
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

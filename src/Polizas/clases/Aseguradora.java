@@ -16,9 +16,11 @@ public class Aseguradora {
     private String telefono;
     private String correo;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Aseguradora() {
     }
 
+    // Constructor con todos los datos (lo usa listar() al leer de la base).
     public Aseguradora(int id, String nombre, String telefono, String correo) {
         this.id = id;
         this.nombre = nombre;
@@ -26,19 +28,23 @@ public class Aseguradora {
         this.correo = correo;
     }
 
+    // Guarda este registro nuevo en la tabla aseguradora.
     public void registrar() throws SQLException {
         Conexion.ejecutar("INSERT INTO aseguradora (nombre, telefono, correo) VALUES (?, ?, ?)", nombre, telefono, correo);
     }
 
+    // Guarda los cambios de este registro en la tabla aseguradora (lo busca por su id).
     public void actualizar() throws SQLException {
         Conexion.ejecutar("UPDATE aseguradora SET nombre = ?, telefono = ?, correo = ? WHERE idAseguradora = ?",
                 nombre, telefono, correo, id);
     }
 
+    // Borra este registro de la tabla aseguradora.
     public void eliminar() throws SQLException {
         Conexion.ejecutar("DELETE FROM aseguradora WHERE idAseguradora = ?", id);
     }
 
+    // Regresa el registro con ese id, o null si no existe.
     public static Aseguradora consultar(int id) throws SQLException {
         for (Aseguradora a : listar()) {
             if (a.getId() == id) {
@@ -48,6 +54,7 @@ public class Aseguradora {
         return null;
     }
 
+    // Regresa todos los registros de la tabla, para llenar las tablas y listas de las pantallas.
     public static List<Aseguradora> listar() throws SQLException {
         List<Aseguradora> lista = new ArrayList<>();
         try (Connection cn = Conexion.conectar();
@@ -61,6 +68,7 @@ public class Aseguradora {
         return lista;
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNombre() { return nombre; }

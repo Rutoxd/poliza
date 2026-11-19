@@ -19,6 +19,7 @@ public class PantallaVehiculos extends Pantalla {
     private JTextField txtSerie = new JTextField();
     private List<Vehiculo> vehiculos;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public PantallaVehiculos() {
         super("Vehículos", "Id", "Cliente", "Marca", "Modelo", "Año", "Placas", "Núm. de serie");
         campo("Cliente:", cmbCliente);
@@ -39,6 +40,7 @@ public class PantallaVehiculos extends Pantalla {
         recargar();
     }
 
+    // Arma el objeto con lo escrito en el formulario y revisa que los datos estén completos.
     private Vehiculo leer() {
         if (cmbCliente.getSelectedItem() == null) {
             throw new IllegalArgumentException("Primero registra al cliente.");
@@ -59,6 +61,7 @@ public class PantallaVehiculos extends Pantalla {
         return v;
     }
 
+    // Trae los registros con listar() y llena la tabla.
     @Override
     protected void cargarTabla() throws SQLException {
         vehiculos = Vehiculo.listar();
@@ -69,11 +72,13 @@ public class PantallaVehiculos extends Pantalla {
         }
     }
 
+    // Botón Agregar: arma el objeto con el formulario y llama a registrar().
     @Override
     protected void agregar() throws SQLException {
         leer().registrar();
     }
 
+    // Botón Actualizar: arma el objeto, le pone el id de la fila elegida y llama a actualizar().
     @Override
     protected void actualizar() throws SQLException {
         Vehiculo v = leer();
@@ -81,11 +86,13 @@ public class PantallaVehiculos extends Pantalla {
         v.actualizar();
     }
 
+    // Botón Eliminar: llama al método que borra o desactiva el registro elegido.
     @Override
     protected void eliminar() throws SQLException {
         vehiculos.get(filaElegida()).eliminar();
     }
 
+    // Pasa los datos de la fila elegida al formulario.
     @Override
     protected void mostrar(int fila) {
         Vehiculo v = vehiculos.get(fila);
@@ -96,6 +103,7 @@ public class PantallaVehiculos extends Pantalla {
         txtSerie.setText(v.getNumeroSerie());
     }
 
+    // Vacía los campos del formulario.
     @Override
     protected void limpiar() {
         txtAnio.setText("");

@@ -9,9 +9,11 @@ public abstract class Persona {
     private String telefono;
     private String correo;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Persona() {
     }
 
+    // Constructor con todos los datos (lo usa listar() al leer de la base).
     public Persona(int id, String nombre, String telefono, String correo) {
         this.id = id;
         this.nombre = nombre;
@@ -24,6 +26,7 @@ public abstract class Persona {
         return correo == null || correo.isBlank() || correo.matches("^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$");
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNombre() { return nombre; }

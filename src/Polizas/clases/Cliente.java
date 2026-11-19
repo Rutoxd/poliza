@@ -14,9 +14,11 @@ public class Cliente extends Persona {
     private String rfc;
     private String domicilio;
 
+    // Constructor vacío: crea el objeto para después llenarlo con los métodos set.
     public Cliente() {
     }
 
+    // Constructor con todos los datos (lo usa listar() al leer de la base).
     public Cliente(int id, String nombre, String telefono, String correo, String rfc, String domicilio) {
         super(id, nombre, telefono, correo);
         this.rfc = rfc;
@@ -69,6 +71,7 @@ public class Cliente extends Persona {
         return rfc != null && rfc.toUpperCase().matches("^[A-ZÑ&]{3,4}\\d{6}[A-Z0-9]{3}$");
     }
 
+    // Getters y setters: leen y cambian los atributos privados (encapsulamiento).
     public String getRfc() { return rfc; }
     public void setRfc(String rfc) { this.rfc = rfc; }
     public String getDomicilio() { return domicilio; }
