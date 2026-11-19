@@ -1,10 +1,18 @@
-# Práctica 3 POO — Sistema de Gestión de Pólizas
+# Proyecto final POO — Sistema de Gestión de Pólizas
 
 ## 1. Base de datos
-Con MariaDB encendido (`sudo systemctl start mariadb`), corre el script como root. Crea la base `polizas`, la tabla `marca` y el usuario `poliza` / `poliza123` que usa la aplicación:
+Con MariaDB o MySQL encendido (`sudo systemctl start mariadb`), corre el script como root. Crea la base `polizas` con sus 14 tablas y 3 vistas (modelo normalizado a 3FN, Fase 3) y el usuario `poliza` / `poliza123` que usa la aplicación:
 
 ```bash
 sudo mariadb < sql/polizas.sql
+mariadb -u poliza -ppoliza123 polizas < sql/datos_prueba.sql   # opcional: datos ficticios
+```
+
+Para comprobar la conexión desde Java (evidencia de la Fase 3):
+
+```bash
+javac -encoding UTF-8 -d bin -cp "lib/*" $(find src -name "*.java")
+java -cp "bin:lib/*" Polizas.General.PruebaConexion
 ```
 
 ## 2. Driver JDBC
