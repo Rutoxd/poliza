@@ -5,7 +5,7 @@
             "type": "java",
             "name": "Polizas",
             "request": "launch",
-            "mainClass": "Polizas.Inicio"
+            "mainClass": "Polizas.pantallas.Inicio"
         }
     ]
 }
